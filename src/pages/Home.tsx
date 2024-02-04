@@ -1,9 +1,56 @@
 import React from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
+import {
+    IonButton,
+    IonContent,
+    IonHeader,
+    IonPage,
+    IonTitle,
+    IonToolbar,
+    useIonActionSheet,
+    useIonModal
+} from '@ionic/react';
 import './Home.css';
 
 const Home: React.FC = () => {
+
+    const [presentLanguageSettingsModal, dismissLanguageSettingsModal] =
+        useIonModal(LanguageSettingsModal, {
+            onDismiss: () => dismissLanguageSettingsModal(),
+        });
+
+    const [present] = useIonActionSheet();
+    const canDismiss =
+        async () => {
+            return new Promise<boolean>((resolve) => {
+                present({
+                    header: "title",
+                    subHeader: "t('cf_appSettings_languageSettings_closeModal_text')",
+                    buttons:  [
+                        {
+                            text:
+                                "t('cf_appSettings_languageSettings_closeModalYes_text')",
+                            role: 'destructive',
+                            cssClass: 'destructive',
+                        },
+                        {
+                            text:
+                                "t('cf_appSettings_languageSettings_closeModalNo_text') ?? undefined",
+                            role: 'cancel',
+                            cssClass: 'cancel',
+                        },
+                    ],
+                    cssClass: 'preventing-modal-dismiss',
+                    onWillDismiss: (ev) => {
+                        if (ev.detail.role === 'destructive') {
+                            resolve(true);
+                        } else {
+                            resolve(false);
+                        }
+                    },
+                });
+            });
+        }
+
   return (
     <IonPage>
       <IonHeader>
@@ -17,10 +64,16 @@ const Home: React.FC = () => {
             <IonTitle size="large">Blank</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <ExploreContainer />
+          <IonButton onClick={() => presentLanguageSettingsModal({canDismiss})} >open</IonButton>
       </IonContent>
     </IonPage>
   );
 };
+
+const LanguageSettingsModal: React.FC<{onDismiss: () => void}> = ({onDismiss}) => {
+    return (
+        <IonButton onClick={() => onDismiss()}>close</IonButton>
+    )
+}
 
 export default Home;
