@@ -24,17 +24,17 @@ const Home: React.FC = () => {
             return new Promise<boolean>((resolve) => {
                 present({
                     header: "title",
-                    subHeader: "t('cf_appSettings_languageSettings_closeModal_text')",
+                    subHeader: "subtitle",
                     buttons:  [
                         {
                             text:
-                                "t('cf_appSettings_languageSettings_closeModalYes_text')",
+                                "close",
                             role: 'destructive',
                             cssClass: 'destructive',
                         },
                         {
                             text:
-                                "t('cf_appSettings_languageSettings_closeModalNo_text') ?? undefined",
+                                "continue",
                             role: 'cancel',
                             cssClass: 'cancel',
                         },
